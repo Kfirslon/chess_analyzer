@@ -57,10 +57,11 @@ def convert_country_code(code):
     except:
         return "Unknown"
 
-def analyze_chess_games_in_folder(folder_path, your_username, clear_cache=False):
+def analyze_chess_games_in_folder(folder_path, your_username, year, months, clear_cache=False):
     all_games = []
     for file in os.listdir(folder_path):
         if file.endswith(".json"):
+            print("Reading:", file)
             with open(os.path.join(folder_path, file), "r") as f:
                 data = json.load(f)
                 for game in data.get("games", []):
@@ -104,6 +105,9 @@ def analyze_chess_games_in_folder(folder_path, your_username, clear_cache=False)
                     })
 
     df = pd.DataFrame(all_games)
+    df = df[df["datetime"].dt.year == year]
+    df = df[df["datetime"].dt.month.isin(months)]
+
     print(f"Total games analyzed: {len(df)}")
 
     unique_opponents = df["opponent"].dropna().unique()
@@ -282,27 +286,59 @@ def render_all_graphs(df):
         country.tight_layout()
         show_plot(country)
 
+        def run_analysis(username, year, months, clear_cache=False):
+            folder = f"chess_games/{username.lower()}"
+            download_monthly_games(username, year, months, folder)
+            df = analyze_chess_games_in_folder(folder, username, year, months, clear_cache)
+            df = df.sort_values("datetime")
+            df["month"] = df["datetime"].dt.strftime("%B")
+            render_all_graphs(df)
 
-if __name__ == "__main__":
-    clear_cache = False  # Set to True if you want to refresh opponent countries
+            # Track streak
+            current = 0
+            best_streak = 0
+            best_month = ""
+            for _, row in df.iterrows():
+                if row["win"] == 1:
+                    current += 1
+                    if current > best_streak:
+                        best_streak = current
+                        best_month = row["month"]
+                else:
+                    current = 0
 
-    # Automatically download monthly games
-    USERNAME = input("Enter your Chess.com username: ").strip()
-    YEAR = int(input("Enter the year (e.g., 2025): ").strip())
-    MONTHS = list(map(int, input("Enter months as comma-separated numbers (e.g., 1,2,3): ").split(",")))
-    JSON_FOLDER = f"chess_games/{USERNAME.lower()}"
-    download_monthly_games(USERNAME, YEAR, MONTHS, JSON_FOLDER)
+            print(f"\nLongest Win Streak: {best_streak} games")
+            print(f"It happened in: {best_month}")
 
-    df = analyze_chess_games_in_folder(JSON_FOLDER, USERNAME, clear_cache=False)
+            df.to_csv(f"{username.lower()}_full_chess_analysis.csv", index=False)
+            print("\nSaved to full_chess_analysis.csv in project folder.")
+
+            draw_results = ["draw", "agreed", "repetition", "stalemate", "insufficient", "50move", "timevsinsufficient"]
+            df["outcome"] = df["result"].apply(
+                lambda x: "Win" if x == "win" else "Draw" if x in draw_results else "Loss"
+            )
+
+            print("\n--- Overall Summary ---")
+            print(f"Total Games: {len(df)}")
+            print(f"Wins: {df['win'].sum()}")
+            print(f"Draws: {sum(df['outcome'] == 'Draw')}")
+            print(f"Losses: {sum(df['outcome'] == 'Loss')}")
+            print(df["result"].value_counts())
+
+
+def run_analysis(username, year, months, clear_cache=False):
+    folder = f"chess_games/{username.lower()}"
+    download_monthly_games(username, year, months, folder)
+    df = analyze_chess_games_in_folder(folder, username, year, months, clear_cache)
     df = df.sort_values("datetime")
     df["month"] = df["datetime"].dt.strftime("%B")
     render_all_graphs(df)
-    # Track streak and store month
+
+    # Track streak
     current = 0
     best_streak = 0
     best_month = ""
-
-    for i, row in df.iterrows():
+    for _, row in df.iterrows():
         if row["win"] == 1:
             current += 1
             if current > best_streak:
@@ -314,12 +350,9 @@ if __name__ == "__main__":
     print(f"\nLongest Win Streak: {best_streak} games")
     print(f"It happened in: {best_month}")
 
-    months_played = df["month"].unique()
-
-    df.to_csv(f"{USERNAME.lower()}_full_chess_analysis.csv", index=False)
+    df.to_csv(f"{username.lower()}_full_chess_analysis.csv", index=False)
     print("\nSaved to full_chess_analysis.csv in project folder.")
 
-    # 1. Classify win/draw/loss
     draw_results = ["draw", "agreed", "repetition", "stalemate", "insufficient", "50move", "timevsinsufficient"]
     df["outcome"] = df["result"].apply(
         lambda x: "Win" if x == "win" else "Draw" if x in draw_results else "Loss"
@@ -332,3 +365,9 @@ if __name__ == "__main__":
     print(f"Losses: {sum(df['outcome'] == 'Loss')}")
     print(df["result"].value_counts())
 
+
+if __name__ == "__main__":
+    username = input("Enter your Chess.com username: ").strip()
+    year = int(input("Enter the year (e.g., 2025): ").strip())
+    months = list(map(int, input("Enter months as comma-separated numbers (e.g., 1,2,3): ").split(",")))
+    run_analysis(username, year, months)

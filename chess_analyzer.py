@@ -286,47 +286,27 @@ def render_all_graphs(df):
         country.tight_layout()
         show_plot(country)
 
-        def run_analysis(username, year, months, clear_cache=False):
-            folder = f"chess_games/{username.lower()}"
-            download_monthly_games(username, year, months, folder)
-            df = analyze_chess_games_in_folder(folder, username, year, months, clear_cache)
-            df = df.sort_values("datetime")
-            df["month"] = df["datetime"].dt.strftime("%B")
-            render_all_graphs(df)
-
-            # Track streak
-            current = 0
-            best_streak = 0
-            best_month = ""
-            for _, row in df.iterrows():
-                if row["win"] == 1:
-                    current += 1
-                    if current > best_streak:
-                        best_streak = current
-                        best_month = row["month"]
-                else:
-                    current = 0
-
-            print(f"\nLongest Win Streak: {best_streak} games")
-            print(f"It happened in: {best_month}")
-
-            df.to_csv(f"{username.lower()}_full_chess_analysis.csv", index=False)
-            print("\nSaved to full_chess_analysis.csv in project folder.")
-
-            draw_results = ["draw", "agreed", "repetition", "stalemate", "insufficient", "50move", "timevsinsufficient"]
-            df["outcome"] = df["result"].apply(
-                lambda x: "Win" if x == "win" else "Draw" if x in draw_results else "Loss"
-            )
-
-            print("\n--- Overall Summary ---")
-            print(f"Total Games: {len(df)}")
-            print(f"Wins: {df['win'].sum()}")
-            print(f"Draws: {sum(df['outcome'] == 'Draw')}")
-            print(f"Losses: {sum(df['outcome'] == 'Loss')}")
-            print(df["result"].value_counts())
-
 
 def run_analysis(username, year, months, clear_cache=False):
+    """Download games, analyze them and render graphs.
+
+    Parameters
+    ----------
+    username : str
+        Chess.com username.
+    year : int
+        Year of games to analyze.
+    months : list[int]
+        Months to include in the analysis.
+    clear_cache : bool, optional
+        If True, country cache will be rebuilt.
+
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame containing the analyzed games.
+    """
+
     folder = f"chess_games/{username.lower()}"
     download_monthly_games(username, year, months, folder)
     df = analyze_chess_games_in_folder(folder, username, year, months, clear_cache)
@@ -364,6 +344,8 @@ def run_analysis(username, year, months, clear_cache=False):
     print(f"Draws: {sum(df['outcome'] == 'Draw')}")
     print(f"Losses: {sum(df['outcome'] == 'Loss')}")
     print(df["result"].value_counts())
+
+    return df
 
 
 if __name__ == "__main__":

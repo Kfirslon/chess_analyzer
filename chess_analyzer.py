@@ -137,14 +137,6 @@ def analyze_chess_games_in_folder(folder_path, your_username, year, months, clea
 
     return df
 
-def plot_win_pie_chart(df):
-    counts = df["outcome"].value_counts()
-    labels = counts.index
-    plt.figure(figsize=(6,6))
-    plt.pie(counts, labels=labels, autopct="%1.1f%%", colors=["#4caf50", "#ffc107", "#f44336"])
-    plt.title("Win vs Draw vs Loss")
-    plt.show()
-
 def simplify(name):
     name = name.split("/")[-1].replace("-", " ").replace("Unknown", "").strip()
     name = re.sub(r"\d+\.\S+", "", name)
@@ -160,7 +152,9 @@ def render_all_graphs(df):
     )
 
     # Graph 1: Pie chart
+    ordered_outcomes = ["Win", "Draw", "Loss"]
     outcome_counts = df["outcome"].value_counts()
+    outcome_counts = outcome_counts.reindex(ordered_outcomes)
     results, ax1 = plt.subplots(figsize=(6, 6))
     ax1.pie(outcome_counts.values, labels=outcome_counts.index, autopct="%1.1f%%",
             colors=["#4caf50", "#ffc107", "#f44336"])

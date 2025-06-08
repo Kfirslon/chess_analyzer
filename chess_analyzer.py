@@ -35,7 +35,7 @@ def download_monthly_games(username, year, months, save_folder):
             print(f"✅ Downloaded: {file_name}")
         else:
             print(f"❌ Failed to fetch: {file_name} (status {res.status_code})")
-        time.sleep(0.5)
+        time.sleep(0.2)
 
 
 def get_country(username):
@@ -158,7 +158,6 @@ def render_all_graphs(df):
     results, ax1 = plt.subplots(figsize=(6, 6))
     ax1.pie(outcome_counts.values, labels=outcome_counts.index, autopct="%1.1f%%",
             colors=["#4caf50", "#ffc107", "#f44336"],
-            startangle=90,
             counterclock=False 
     )
     ax1.set_title("Win vs Draw vs Loss")

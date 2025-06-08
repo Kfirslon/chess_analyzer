@@ -157,9 +157,7 @@ def render_all_graphs(df):
     outcome_counts = outcome_counts.reindex(ordered_outcomes)
     results, ax1 = plt.subplots(figsize=(6, 6))
     ax1.pie(outcome_counts.values, labels=outcome_counts.index, autopct="%1.1f%%",
-            colors=["#4caf50", "#ffc107", "#f44336"],
-            startangle=185.3,
-            counterclock=False 
+            colors=["#4caf50", "#ffc107", "#f44336"] 
     )
     ax1.set_title("Win vs Draw vs Loss")
     show_plot(results)

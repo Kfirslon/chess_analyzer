@@ -173,7 +173,21 @@ def render_all_graphs(df):
         "Win %": win_percentage
     })
 
+    fallback_level = None
     filtered = full_opening_summary[full_opening_summary["Games Played"] > 10].sort_values("Win %", ascending=False)
+    
+    if len(filtered) < 3:
+        filtered = full_opening_summary[full_opening_summary["Games Played"] > 5].sort_values("Win %", ascending=False)
+        fallback_level = "medium"
+
+    if len(filtered) < 3:
+        filtered = full_opening_summary[full_opening_summary["Games Played"] > 3].sort_values("Win %", ascending=False)
+        fallback_level = "low"
+
+    if len(filtered) < 3:
+        filtered = full_opening_summary.sort_values("Games Played", ascending=False).head(3)
+        fallback_level = "very low"
+    
     top_openings = filtered.head(3).copy()
     bottom_openings = filtered.tail(3).copy()
 
@@ -186,7 +200,13 @@ def render_all_graphs(df):
     ]:
         opening, ax = plt.subplots(figsize=(10, 5))
         bars = ax.bar(data.index, data["Win %"], color=color)
-        ax.set_title(title)
+
+        # Add fallback label if needed
+        full_title = title
+        if fallback_level:
+            full_title += f" (Low Data - {fallback_level})"
+        
+        ax.set_title(full_title)
         ax.set_ylabel("Win %")
         for bar, (name, row) in zip(bars, data.iterrows()):
             ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,

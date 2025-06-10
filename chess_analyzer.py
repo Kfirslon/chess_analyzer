@@ -167,7 +167,7 @@ def render_all_graphs(df):
     opening_won = df[df["win"] == 1]["opening"].value_counts().reindex(opening_played.index, fill_value=0)
     win_percentage = (opening_won / opening_played * 100).round(1)
 
-    full_opening_summary = pd.DataFrame({
+    summary = pd.DataFrame({
         "Games Played": opening_played,
         "Wins": opening_won,
         "Win %": win_percentage

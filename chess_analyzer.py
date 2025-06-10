@@ -163,7 +163,7 @@ def render_all_graphs(df):
     show_plot(results)
 
     # Graph 2 & 3: Top and bottom 3 openings
-        # Step 1: Calculate win stats
+        # Step 1: Win % Calculation
     played = df["opening"].value_counts()
     won = df[df["win"] == 1]["opening"].value_counts().reindex(played.index, fill_value=0)
     win_pct = (won / played * 100).round(1)
@@ -174,18 +174,33 @@ def render_all_graphs(df):
         "Win %": win_pct
     }).dropna()
     
-    # Step 2: Filter only openings with >5 games
-    filtered = summary[summary["Games Played"] > 5].copy()
+    # Step 2: Primary filter (>5 games)
+    main = summary[summary["Games Played"] > 5].copy()
+    extra = summary[~summary.index.isin(main.index)]
     
-    # Step 3: Get top 3 and bottom 3 by Win %
-    top3 = filtered.sort_values("Win %", ascending=False).head(3)
-    bottom3 = filtered.sort_values("Win %").head(3)
+    # Step 3: Top 3
+    top_main = main.sort_values("Win %", ascending=False).head(3)
+    needed_top = 3 - len(top_main)
+    if needed_top > 0:
+        top_extra = extra.sort_values("Win %", ascending=False).head(needed_top)
+        top3 = pd.concat([top_main, top_extra])
+    else:
+        top3 = top_main
     
-    # Step 4: Simplify opening names
+    # Step 4: Bottom 3
+    bottom_main = main.sort_values("Win %").head(3)
+    needed_bottom = 3 - len(bottom_main)
+    if needed_bottom > 0:
+        bottom_extra = extra.sort_values("Win %").head(needed_bottom)
+        bottom3 = pd.concat([bottom_main, bottom_extra])
+    else:
+        bottom3 = bottom_main
+    
+    # Step 5: Simplify names
     top3.index = top3.index.to_series().apply(simplify)
     bottom3.index = bottom3.index.to_series().apply(simplify)
     
-    # Step 5: Plot Top 3
+    # Step 6: Plot Top 3
     opening, ax = plt.subplots(figsize=(10, 5))
     bars = ax.bar(top3.index, top3["Win %"], color="green")
     ax.set_title("Top 3 Openings by Win %")
@@ -199,7 +214,7 @@ def render_all_graphs(df):
     plt.tight_layout()
     show_plot(opening)
     
-    # Step 6: Plot Bottom 3
+    # Step 7: Plot Bottom 3
     opening, ax = plt.subplots(figsize=(10, 5))
     bars = ax.bar(bottom3.index, bottom3["Win %"], color="red")
     ax.set_title("Bottom 3 Openings by Win %")

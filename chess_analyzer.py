@@ -174,13 +174,18 @@ def render_all_graphs(df):
     })
 
     
-    # Filtering logic: >10 games → >5 → fallback to most played
-    if len(full_opening_summary[full_opening_summary["Games Played"] > 10]) >= 6:
-        filtered = full_opening_summary[full_opening_summary["Games Played"] > 10]
-    elif len(full_opening_summary[full_opening_summary["Games Played"] > 5]) >= 6:
-        filtered = full_opening_summary[full_opening_summary["Games Played"] > 5]
-    else:
-        filtered = full_opening_summary.sort_values("Games Played", ascending=False)
+        # Step 1: Try >10 games
+    filtered = summary[summary["Games Played"] > 10].copy()
+    
+    # Step 2: If not enough, try >5 games
+    if len(filtered) < 6:
+        extra = summary[(summary["Games Played"] > 5) & ~summary.index.isin(filtered.index)]
+        filtered = pd.concat([filtered, extra])
+    
+    # Step 3: If still not enough, fill with top played openings
+    if len(filtered) < 6:
+        extra = summary[~summary.index.isin(filtered.index)]
+        filtered = pd.concat([filtered, extra.sort_values("Games Played", ascending=False).head(6 - len(filtered))])
 
 
     

@@ -173,47 +173,41 @@ def render_all_graphs(df):
         "Win %": win_percentage
     })
 
+        
+        # Step 2: Use >10 games first
+    main = summary[summary["Games Played"] > 10]
     
-    # Step 1: Start with >10 games
-    filtered = summary[summary["Games Played"] > 10].copy()
-    
-    # Step 2: Add from >5 games if needed
-    if len(filtered) < 6:
-        extra = summary[(summary["Games Played"] > 5) & ~summary.index.isin(filtered.index)]
-        filtered = pd.concat([filtered, extra])
-    
-    # Step 3: Add from any remaining (fallback) if still not enough
-    if len(filtered) < 6:
-        extra = summary[~summary.index.isin(filtered.index)].sort_values("Games Played", ascending=False)
-        filtered = pd.concat([filtered, extra.head(6 - len(filtered))])
-    
-    # Ensure exactly 3 top + 3 bottom
-    filtered = filtered.drop_duplicates()
-    if len(filtered) < 6:
-        print("❌ Still not enough unique openings to display both charts with 3 bars each.")
+    # Step 3: Fill from most played if less than 6 total
+    if len(main) < 6:
+        needed = 6 - len(main)
+        extra = summary[~summary.index.isin(main.index)].sort_values("Games Played", ascending=False).head(needed)
+        full = pd.concat([main, extra])
     else:
-        top_openings = filtered.sort_values("Win %", ascending=False).head(3).copy()
-        bottom_openings = filtered.sort_values("Win %").head(3).copy()
+        full = main
     
-        top_openings.index = top_openings.index.to_series().apply(simplify)
-        bottom_openings.index = bottom_openings.index.to_series().apply(simplify)
-    
-        for title, data, color in [
-            ("Top 3 Openings by Win %", top_openings, "green"),
-            ("Bottom 3 Openings by Win %", bottom_openings, "red")
-        ]:
-            opening, ax = plt.subplots(figsize=(10, 5))
-            bars = ax.bar(data.index, data["Win %"], color=color)
-            ax.set_title(title)
-            ax.set_ylabel("Win %")
-            for bar, (name, row) in zip(bars, data.iterrows()):
-                ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,
-                        f"{int(row['Wins'])}/{int(row['Games Played'])}\n({row['Win %']}%)",
-                        ha="center", fontsize=9)
-            plt.xticks(rotation=0)
-            plt.ylim(0, 100)
-            plt.tight_layout()
-            show_plot(opening)
+    # Step 4: Get top 3 and bottom 3
+    top_openings = full.sort_values("Win %", ascending=False).head(3)
+    bottom_openings = full.sort_values("Win %").head(3)
+
+    top_openings.index = top_openings.index.to_series().apply(simplify)
+    bottom_openings.index = bottom_openings.index.to_series().apply(simplify)
+
+    for title, data, color in [
+        ("Top 3 Openings by Win %", top_openings, "green"),
+        ("Bottom 3 Openings by Win %", bottom_openings, "red")
+    ]:
+        opening, ax = plt.subplots(figsize=(10, 5))
+        bars = ax.bar(data.index, data["Win %"], color=color)
+        ax.set_title(title)
+        ax.set_ylabel("Win %")
+        for bar, (name, row) in zip(bars, data.iterrows()):
+            ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,
+                    f"{int(row['Wins'])}/{int(row['Games Played'])}\n({row['Win %']}%)",
+                    ha="center", fontsize=9)
+        plt.xticks(rotation=0)
+        plt.ylim(0, 100)
+        plt.tight_layout()
+        show_plot(opening)
 
     # Graph 4: Win Rate By Month
     month_stats = df.groupby("month").agg(

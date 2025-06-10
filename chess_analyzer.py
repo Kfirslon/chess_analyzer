@@ -174,14 +174,14 @@ def render_all_graphs(df):
     })
 
     
-    # Try thresholds: >10, >5, >3, then fallback to top played
-    for threshold in [10, 5, 3, 0]:
-        filtered = full_opening_summary[full_opening_summary["Games Played"] > threshold]
-        if len(filtered) >= 6:
-            break
-    # If even then not enough, just take top played
-    if len(filtered) < 6:
+    # Filtering logic: >10 games → >5 → fallback to most played
+    if len(full_opening_summary[full_opening_summary["Games Played"] > 10]) >= 6:
+        filtered = full_opening_summary[full_opening_summary["Games Played"] > 10]
+    elif len(full_opening_summary[full_opening_summary["Games Played"] > 5]) >= 6:
+        filtered = full_opening_summary[full_opening_summary["Games Played"] > 5]
+    else:
         filtered = full_opening_summary.sort_values("Games Played", ascending=False)
+
 
     
     top_openings = filtered.sort_values("Win %", ascending=False).head(3).copy()

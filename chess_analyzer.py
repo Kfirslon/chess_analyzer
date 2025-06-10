@@ -174,7 +174,7 @@ def render_all_graphs(df):
         "Win %": win_pct
     }).dropna()
     
-    # Step 2: Primary filter (>5 games)
+    # Step 2: Primary filter (>10 games)
     main = summary[summary["Games Played"] > 5].copy()
     extra = summary[~summary.index.isin(main.index)]
     

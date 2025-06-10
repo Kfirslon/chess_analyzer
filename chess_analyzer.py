@@ -174,20 +174,17 @@ def render_all_graphs(df):
     })
 
         
-        # Step 2: Use >10 games first
-    main = summary[summary["Games Played"] > 10]
+    # Step 2: Use openings with >5 games first
+    main = summary[summary["Games Played"] > 5].copy()
     
-    # Step 3: Fill from most played if less than 6 total
+    # Step 3: If not enough, fill from most played until we have 6 total
     if len(main) < 6:
+        filler = summary[~summary.index.isin(main.index)].sort_values("Games Played", ascending=False)
         needed = 6 - len(main)
-        extra = summary[~summary.index.isin(main.index)].sort_values("Games Played", ascending=False).head(needed)
-        full = pd.concat([main, extra])
-    else:
-        full = main
-    
-    # Step 4: Get top 3 and bottom 3
-    top_openings = full.sort_values("Win %", ascending=False).head(3)
-    bottom_openings = full.sort_values("Win %").head(3)
+        main = pd.concat([main, filler.head(needed)])
+
+    top_openings = main.sort_values("Win %", ascending=False).head(3)
+    bottom_openings = main.sort_values("Win %").head(3)
 
     top_openings.index = top_openings.index.to_series().apply(simplify)
     bottom_openings.index = bottom_openings.index.to_series().apply(simplify)

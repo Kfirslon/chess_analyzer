@@ -167,37 +167,36 @@ def render_all_graphs(df):
     opening_won = df[df["win"] == 1]["opening"].value_counts().reindex(opening_played.index, fill_value=0)
     win_percentage = (opening_won / opening_played * 100).round(1)
 
-    summary = pd.DataFrame({
+    full_opening_summary = pd.DataFrame({
         "Games Played": opening_played,
         "Wins": opening_won,
         "Win %": win_percentage
     })
 
     
-    fallback_level = None
-    filtered = summary[summary["Games Played"] > 10]
-
-    for threshold, label in [(5, "medium"), (3, "low"), (0, "very low")]:
-        if len(filtered) >= 3:
+    # Try thresholds: >10, >5, >3, then fallback to top played
+    for threshold in [10, 5, 3, 0]:
+        filtered = full_opening_summary[full_opening_summary["Games Played"] > threshold]
+        if len(filtered) >= 6:
             break
-        extra = summary[(summary["Games Played"] > threshold) & ~summary.index.isin(filtered.index)]
-        filtered = pd.concat([filtered, extra]).sort_values("Win %", ascending=False)
-        fallback_level = label
-    
-    top3 = filtered.sort_values("Win %", ascending=False).head(3).copy()
-    bottom3 = summary[~summary.index.isin(top3.index)].sort_values("Win %").head(3).copy()
+    # If even then not enough, just take top played
+    if len(filtered) < 6:
+        filtered = full_opening_summary.sort_values("Games Played", ascending=False)
 
-    top3.index = top3.index.to_series().apply(simplify)
-    bottom3.index = bottom3.index.to_series().apply(simplify)
+    
+    top_openings = filtered.sort_values("Win %", ascending=False).head(3).copy()
+    bottom_openings = filtered.sort_values("Win %").head(3).copy()
+
+    top_openings.index = top_openings.index.to_series().apply(simplify)
+    bottom_openings.index = bottom_openings.index.to_series().apply(simplify)
 
     for title, data, color in [
-        ("Top 3 Openings by Win %", top3, "green"),
-        ("Bottom 3 Openings by Win %", bottom3, "red")
+        ("Top 3 Openings by Win %", top_openings, "green"),
+        ("Bottom 3 Openings by Win %", bottom_openings, "red")
     ]:
         opening, ax = plt.subplots(figsize=(10, 5))
         bars = ax.bar(data.index, data["Win %"], color=color)
-        full_title = title + (f" (Low Data - {fallback_level})" if fallback_level else "")
-        ax.set_title(full_title)
+        ax.set_title(title)
         ax.set_ylabel("Win %")
         for bar, (name, row) in zip(bars, data.iterrows()):
             ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 1,

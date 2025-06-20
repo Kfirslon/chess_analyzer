@@ -99,7 +99,7 @@ st.markdown(
 
 
 
-st.title("♟️ HaTaktikan – Your Chess Analyzer")
+st.markdown("<h1 style='white-space: nowrap;'>♟️ HaTaktikan – Your Chess Analyzer</h1>", unsafe_allow_html=True)
 
 username = st.text_input("Enter Chess.com username", value="username")
 year = st.number_input("Enter year", min_value=2000, max_value=2025, value=2025)

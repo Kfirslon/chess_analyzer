@@ -26,6 +26,13 @@ st.markdown(
         /* Labels */
         label, .stTextInput label, .stNumberInput label {
             color: white !important;
+            font-weight: bold;
+        }
+
+        /* Placeholder text inside inputs */
+        input::placeholder {
+            color: #cccccc !important;
+            opacity: 1 !important;
         }
 
         /* Input fields */
@@ -36,16 +43,13 @@ st.markdown(
             border-radius: 6px !important;
         }
 
-        /* Button styling */
+        /* Button with black text */
         button {
-            background-color: #ffffff !important;
-            color: #2d402d !important;
-            border-radius: 6px !important;
-            border: 1px solid #2d402d !important;
+            color: #000000 !important;
             font-weight: bold;
         }
 
-        /* Hide top-right controls */
+        /* Hide Streamlit controls */
         [data-testid="stToolbar"],
         [data-testid="stDeployButton"],
         [data-testid="stSidebarNav"],
@@ -55,30 +59,30 @@ st.markdown(
             position: fixed !important;
         }
 
-        /* Hide floating 'Manage App' button */
+        /* Hide bottom right “Manage App” */
         div[data-testid="stActionButtonIcon"] {
             display: none !important;
         }
 
-        /* Spinner/info message */
+        /* Spinner/info message text */
         [data-testid="stMarkdownContainer"] p {
             color: white !important;
             font-weight: bold;
         }
 
-        /* Error box */
+        /* Error text */
         [data-testid="stNotificationContentError"] {
             color: #ffdddd !important;
             font-weight: bold;
         }
 
-        /* Success box */
+        /* Success text */
         [data-testid="stNotificationContentSuccess"] {
             color: #d4ffd4 !important;
             font-weight: bold;
         }
 
-        /* Remove chain-link icon in headers */
+        /* Hide link icons next to headers */
         h1 > a, h2 > a, h3 > a {
             display: none !important;
         }
@@ -88,8 +92,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-
 
 st.title("♟️ Chess.com Game Analyzer")
 

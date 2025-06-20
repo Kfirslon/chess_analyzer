@@ -4,13 +4,13 @@ from chess_analyzer import run_analysis
 st.markdown(
     """
     <style>
-        /* Background: rich chess green gradient */
+        /* Background */
         .stApp {
             background: linear-gradient(135deg, #2d402d, #6f8d6f);
             color: #f0f0f0;
         }
 
-        /* Top-left credit badge */
+        /* Top-left credit */
         .top-left {
             position: fixed;
             top: 12px;
@@ -23,7 +23,7 @@ st.markdown(
             z-index: 1000;
         }
 
-        /* Input labels */
+        /* Labels */
         label, .stTextInput label, .stNumberInput label {
             color: white !important;
         }
@@ -45,7 +45,7 @@ st.markdown(
             font-weight: bold;
         }
 
-        /* Hide Streamlit's default controls */
+        /* Hide top-right controls */
         [data-testid="stToolbar"],
         [data-testid="stDeployButton"],
         [data-testid="stSidebarNav"],
@@ -55,18 +55,30 @@ st.markdown(
             position: fixed !important;
         }
 
-        /* Hide 'Manage app' floating icon */
+        /* Hide floating 'Manage App' button */
         div[data-testid="stActionButtonIcon"] {
             display: none !important;
         }
 
-        /* Improve visibility of success messages */
-        [data-testid="stNotificationContentSuccess"] {
-            color: #002f00 !important;
+        /* Spinner/info message */
+        [data-testid="stMarkdownContainer"] p {
+            color: white !important;
             font-weight: bold;
         }
 
-        /* Remove link/anchor icons next to headings */
+        /* Error box */
+        [data-testid="stNotificationContentError"] {
+            color: #ffdddd !important;
+            font-weight: bold;
+        }
+
+        /* Success box */
+        [data-testid="stNotificationContentSuccess"] {
+            color: #d4ffd4 !important;
+            font-weight: bold;
+        }
+
+        /* Remove chain-link icon in headers */
         h1 > a, h2 > a, h3 > a {
             display: none !important;
         }
@@ -76,6 +88,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 
 st.title("♟️ Chess.com Game Analyzer")

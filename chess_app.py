@@ -21,7 +21,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("♟️ Kfir - Chess.com Game Analyzer")
+st.title("♟️ Chess.com Game Analyzer")
 
 username = st.text_input("Enter Chess.com username", value="username")
 year = st.number_input("Enter year", min_value=2000, max_value=2025, value=2025)

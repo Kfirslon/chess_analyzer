@@ -317,6 +317,9 @@ def run_analysis(username, year, months, clear_cache=False):
     folder = f"chess_games/{username.lower()}"
     download_monthly_games(username, year, months, folder)
     df = analyze_chess_games_in_folder(folder, username, year, months, clear_cache)
+    if df.empty or "datetime" not in df.columns:
+    st.error("❌ No valid games found for this user and date range.")
+    return
     df = df.sort_values("datetime")
     df["month"] = df["datetime"].dt.strftime("%B")
     render_all_graphs(df)

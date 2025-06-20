@@ -29,7 +29,7 @@ st.markdown(
             font-weight: bold;
         }
 
-        /* Placeholder text inside inputs */
+        /* Placeholder text */
         input::placeholder {
             color: #cccccc !important;
             opacity: 1 !important;
@@ -43,13 +43,17 @@ st.markdown(
             border-radius: 6px !important;
         }
 
-        /* Button with black text */
+        /* Make Run Analysis button always red */
         button {
-            color: #000000 !important;
+            background-color: #f44336 !important; /* red */
+            color: white !important;
             font-weight: bold;
+            border: none !important;
+            border-radius: 10px !important;
+            padding: 0.5rem 1.2rem !important;
         }
 
-        /* Hide Streamlit controls */
+        /* Hide Streamlit toolbar and menu */
         [data-testid="stToolbar"],
         [data-testid="stDeployButton"],
         [data-testid="stSidebarNav"],
@@ -59,30 +63,30 @@ st.markdown(
             position: fixed !important;
         }
 
-        /* Hide bottom right “Manage App” */
+        /* Hide “Manage app” button in bottom right */
         div[data-testid="stActionButtonIcon"] {
             display: none !important;
         }
 
-        /* Spinner/info message text */
+        /* Spinner/info text */
         [data-testid="stMarkdownContainer"] p {
             color: white !important;
             font-weight: bold;
         }
 
-        /* Error text */
+        /* Error message color */
         [data-testid="stNotificationContentError"] {
             color: #ffdddd !important;
             font-weight: bold;
         }
 
-        /* Success text */
+        /* Success message color */
         [data-testid="stNotificationContentSuccess"] {
             color: #d4ffd4 !important;
             font-weight: bold;
         }
 
-        /* Hide link icons next to headers */
+        /* Hide link icon in headers */
         h1 > a, h2 > a, h3 > a {
             display: none !important;
         }
@@ -92,6 +96,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 st.title("♟️ Chess.com Game Analyzer")
 

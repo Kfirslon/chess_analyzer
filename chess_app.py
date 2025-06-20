@@ -4,13 +4,11 @@ from chess_analyzer import run_analysis
 st.markdown(
     """
     <style>
-        /* Background: warm chess-style green */
         .stApp {
             background: linear-gradient(135deg, #2d402d, #6f8d6f);
             color: #f0f0f0;
         }
 
-        /* Top-left credit */
         .top-left {
             position: fixed;
             top: 12px;
@@ -23,12 +21,10 @@ st.markdown(
             z-index: 1000;
         }
 
-        /* White labels for inputs */
         label, .stTextInput label, .stNumberInput label {
             color: white !important;
         }
 
-        /* Inputs styling */
         input, .stNumberInput input, .stTextInput > div > div > input {
             background-color: #ffffff !important;
             color: #000000 !important;
@@ -36,7 +32,6 @@ st.markdown(
             border-radius: 6px !important;
         }
 
-        /* Button style */
         button {
             background-color: #ffffff !important;
             color: #2d402d !important;
@@ -45,13 +40,17 @@ st.markdown(
             font-weight: bold;
         }
 
-        /* HIDE GitHub, Edit, Share, More buttons, menu, footer, and "Manage app" */
-        button[title="Open GitHub repository"],
-        button[title="Edit app"],
-        button[title="Share"],
-        button[title="More options"],
-        #MainMenu,
-        footer,
+        /* FULLY hide Streamlit's top-right controls (GitHub, Share, Edit, Menu, Feedback) */
+        [data-testid="stToolbar"],
+        [data-testid="stDeployButton"],
+        [data-testid="stSidebarNav"],
+        header, footer {
+            visibility: hidden !important;
+            height: 0 !important;
+            position: fixed !important;
+        }
+
+        /* Hide 'Manage app' button at bottom-right */
         div[data-testid="stActionButtonIcon"] {
             display: none !important;
         }
@@ -61,6 +60,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 
 

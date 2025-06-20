@@ -43,9 +43,9 @@ st.markdown(
             border-radius: 6px !important;
         }
 
-        /* Make Run Analysis button always red */
-        button {
-            background-color: #f44336 !important; /* red */
+        /* Style only the Run Analysis button */
+        div.stButton > button {
+            background-color: #f44336 !important;
             color: white !important;
             font-weight: bold;
             border: none !important;
@@ -74,19 +74,19 @@ st.markdown(
             font-weight: bold;
         }
 
-        /* Error message color */
+        /* Error message */
         [data-testid="stNotificationContentError"] {
             color: #ffdddd !important;
             font-weight: bold;
         }
 
-        /* Success message color */
+        /* Success message */
         [data-testid="stNotificationContentSuccess"] {
             color: #d4ffd4 !important;
             font-weight: bold;
         }
 
-        /* Hide link icon in headers */
+        /* Hide chain link icon in headers */
         h1 > a, h2 > a, h3 > a {
             display: none !important;
         }
@@ -96,6 +96,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 
 st.title("♟️ Chess.com Game Analyzer")

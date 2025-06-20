@@ -4,11 +4,13 @@ from chess_analyzer import run_analysis
 st.markdown(
     """
     <style>
+        /* Background: warm chess-style green */
         .stApp {
-            background: linear-gradient(135deg, #1a2b1f, #364e3a);
+            background: linear-gradient(135deg, #2d402d, #6f8d6f);
             color: #f0f0f0;
         }
 
+        /* Top-left credit */
         .top-left {
             position: fixed;
             top: 12px;
@@ -21,10 +23,12 @@ st.markdown(
             z-index: 1000;
         }
 
+        /* White labels for inputs */
         label, .stTextInput label, .stNumberInput label {
             color: white !important;
         }
 
+        /* Inputs styling */
         input, .stNumberInput input, .stTextInput > div > div > input {
             background-color: #ffffff !important;
             color: #000000 !important;
@@ -32,18 +36,32 @@ st.markdown(
             border-radius: 6px !important;
         }
 
+        /* Button style */
         button {
             background-color: #ffffff !important;
-            color: #1d3524 !important;
+            color: #2d402d !important;
             border-radius: 6px !important;
-            border: 1px solid #1d3524 !important;
+            border: 1px solid #2d402d !important;
             font-weight: bold;
         }
+
+        /* HIDE GitHub, Edit, Share, More buttons, menu, footer, and "Manage app" */
+        button[title="Open GitHub repository"],
+        button[title="Edit app"],
+        button[title="Share"],
+        button[title="More options"],
+        #MainMenu,
+        footer,
+        div[data-testid="stActionButtonIcon"] {
+            display: none !important;
+        }
     </style>
+
     <div class="top-left">♟️ by Kfir Slonimski</div>
     """,
     unsafe_allow_html=True
 )
+
 
 
 st.title("♟️ Chess.com Game Analyzer")

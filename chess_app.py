@@ -4,11 +4,13 @@ from chess_analyzer import run_analysis
 st.markdown(
     """
     <style>
+        /* Background: rich chess green gradient */
         .stApp {
             background: linear-gradient(135deg, #2d402d, #6f8d6f);
             color: #f0f0f0;
         }
 
+        /* Top-left credit badge */
         .top-left {
             position: fixed;
             top: 12px;
@@ -21,10 +23,12 @@ st.markdown(
             z-index: 1000;
         }
 
+        /* Input labels */
         label, .stTextInput label, .stNumberInput label {
             color: white !important;
         }
 
+        /* Input fields */
         input, .stNumberInput input, .stTextInput > div > div > input {
             background-color: #ffffff !important;
             color: #000000 !important;
@@ -32,6 +36,7 @@ st.markdown(
             border-radius: 6px !important;
         }
 
+        /* Button styling */
         button {
             background-color: #ffffff !important;
             color: #2d402d !important;
@@ -40,7 +45,7 @@ st.markdown(
             font-weight: bold;
         }
 
-        /* FULLY hide Streamlit's top-right controls (GitHub, Share, Edit, Menu, Feedback) */
+        /* Hide Streamlit's default controls */
         [data-testid="stToolbar"],
         [data-testid="stDeployButton"],
         [data-testid="stSidebarNav"],
@@ -50,8 +55,19 @@ st.markdown(
             position: fixed !important;
         }
 
-        /* Hide 'Manage app' button at bottom-right */
+        /* Hide 'Manage app' floating icon */
         div[data-testid="stActionButtonIcon"] {
+            display: none !important;
+        }
+
+        /* Improve visibility of success messages */
+        [data-testid="stNotificationContentSuccess"] {
+            color: #002f00 !important;
+            font-weight: bold;
+        }
+
+        /* Remove link/anchor icons next to headings */
+        h1 > a, h2 > a, h3 > a {
             display: none !important;
         }
     </style>
@@ -60,8 +76,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-
 
 
 st.title("♟️ Chess.com Game Analyzer")

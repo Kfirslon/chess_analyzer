@@ -5,7 +5,7 @@ st.markdown(
     """
     <style>
         .stApp {
-            background: linear-gradient(#1d3524, #4a6e4d);
+            background: linear-gradient(135deg, #1d3524, #4a6e4d);
             color: #f0f0f0;
         }
 
@@ -21,7 +21,10 @@ st.markdown(
             z-index: 1000;
         }
 
-        /* Input fields */
+        label, .stTextInput label, .stNumberInput label {
+            color: white !important;
+        }
+
         input, .stNumberInput input, .stTextInput > div > div > input {
             background-color: #ffffff !important;
             color: #000000 !important;
@@ -29,12 +32,11 @@ st.markdown(
             border-radius: 6px !important;
         }
 
-        /* Button style */
         button {
             background-color: #ffffff !important;
-            color: #0b3d0b !important;
+            color: #1d3524 !important;
             border-radius: 6px !important;
-            border: 1px solid #0b3d0b !important;
+            border: 1px solid #1d3524 !important;
             font-weight: bold;
         }
     </style>

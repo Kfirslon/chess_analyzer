@@ -1,6 +1,26 @@
 import streamlit as st
 from chess_analyzer import run_analysis
 
+st.markdown(
+    """
+    <style>
+        .top-left {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            font-size: 14px;
+            color: gray;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 4px 8px;
+            border-radius: 6px;
+            z-index: 1000;
+        }
+    </style>
+    <div class="top-left">🔹 by Kfir Slonimski</div>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("♟️ Kfir - Chess.com Game Analyzer")
 
 username = st.text_input("Enter Chess.com username", value="username")

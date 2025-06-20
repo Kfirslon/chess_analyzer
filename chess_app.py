@@ -5,7 +5,7 @@ st.markdown(
     """
     <style>
         .stApp {
-            background: linear-gradient(135deg, #2f4f2f, #a9cba3);
+            background: linear-gradient(135deg, #1f3d1f, #3c5e3c);
             color: #f0f0f0;
         }
 

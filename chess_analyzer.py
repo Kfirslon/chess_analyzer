@@ -317,8 +317,11 @@ def run_analysis(username, year, months, clear_cache=False):
     folder = f"chess_games/{username.lower()}"
     download_monthly_games(username, year, months, folder)
     df = analyze_chess_games_in_folder(folder, username, year, months, clear_cache)
-    if not isinstance(df, pd.DataFrame) or df.empty or "datetime" not in df.columns:
-        st.error("❌ No valid games found. Double-check the username and time range.")
+    if not isinstance(df, pd.DataFrame) or df.empty:
+        st.error(f"❌ No games found for username '{username}' in the specified date range.")
+        return
+    if "datetime" not in df.columns:
+        st.error(f"❌ Invalid data format for username '{username}'. Please check if the username exists.")
         return
     df = df.sort_values("datetime")
     df["month"] = df["datetime"].dt.strftime("%B")

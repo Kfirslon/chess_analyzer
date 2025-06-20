@@ -99,7 +99,7 @@ st.markdown(
 
 
 
-st.title("♟️ Chess.com Game Analyzer")
+st.title("♟️ HaTaktikan – See Beyond the Board")
 
 username = st.text_input("Enter Chess.com username", value="username")
 year = st.number_input("Enter year", min_value=2000, max_value=2025, value=2025)

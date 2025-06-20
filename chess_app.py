@@ -109,8 +109,7 @@ if st.button("Run Analysis"):
     try:
         months = [int(m.strip()) for m in months_input.split(",") if m.strip().isdigit()]
         
-        with st.spinner("Analyzing your games..."):
-            st.info("⏳ Downloading and processing data...")
+        with st.spinner("⏳ Analyzing your games..."):
             run_analysis(username, year, months)
 
         st.success("✅ Analysis complete!")

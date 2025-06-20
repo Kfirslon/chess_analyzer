@@ -4,25 +4,37 @@ from chess_analyzer import run_analysis
 st.markdown(
     """
     <style>
-        body {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        /* Background with a chess-like vibe */
+        .stApp {
+            background: radial-gradient(circle at top left, #d2b48c, #8b5e3c);
+            color: #222;
         }
 
+        /* Top-left credit */
         .top-left {
             position: fixed;
             top: 12px;
             left: 12px;
             font-size: 14px;
-            color: #555;
-            background-color: rgba(255, 255, 255, 0.85);
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 4px 10px;
             border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             z-index: 1000;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
 
-        .stApp {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        /* Input field visibility fix */
+        input, .stNumberInput, .stTextInput > div > div > input {
+            background-color: #fdfdfd !important;
+            color: #111 !important;
+        }
+
+        /* Button style */
+        button {
+            background-color: #444444 !important;
+            color: white !important;
+            border-radius: 6px !important;
         }
     </style>
     <div class="top-left">🔹 by Kfir Slonimski</div>

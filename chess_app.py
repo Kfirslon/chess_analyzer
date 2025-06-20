@@ -73,6 +73,11 @@ months_input = st.text_input("Enter months (comma-separated, e.g., 1,2,3)", valu
 if st.button("Run Analysis"):
     try:
         months = [int(m.strip()) for m in months_input.split(",") if m.strip().isdigit()]
-        run_analysis(username, year, months)
+        
+        with st.spinner("Analyzing your games..."):
+            st.info("⏳ Downloading and processing data...")
+            run_analysis(username, year, months)
+
+        st.success("✅ Analysis complete!")
     except Exception as e:
-        st.error(f"Error: {e}")
+        st.error(f"❌ Error: {e}")

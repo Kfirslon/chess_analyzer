@@ -101,7 +101,7 @@ st.markdown(
 
 st.title("♟️ HaTaktikan - Chess Analyzer")
 
-username = st.text_input("Enter Chess.com username", value="username")
+username = st.text_input("Enter Chess.com username", value="drchessbot")
 year = st.number_input("Enter year", min_value=2000, max_value=2025, value=2025)
 months_input = st.text_input("Enter months (comma-separated, e.g., 1,2,3)", value="1")
 
